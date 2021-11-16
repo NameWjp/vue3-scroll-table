@@ -1,11 +1,11 @@
 <template>
-  <div>
-    这是 table next column 组件
-  </div>
+  <slot />
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue';
+import { defineComponent, inject, onBeforeMount, toRefs, watch } from 'vue';
+import { addStoreItemKey, updateStoreItemKey } from '../symbols';
+import uniqueId from 'lodash-es/uniqueId';
 
 export default defineComponent({
   name: 'ScrollTableColumn',
@@ -13,11 +13,39 @@ export default defineComponent({
     /**
      * 列名称
      */
-    label: String,
+    label: {
+      type: String,
+      default: null
+    },
     /**
      * 对应列内容的字段名
      */
-    prop: String
+    prop: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { label, prop } = toRefs(props);
+    const id = uniqueId();
+    const addStoreItem = inject(addStoreItemKey);
+    const updateStoreItem = inject(updateStoreItemKey);
+
+    onBeforeMount(() => {
+      addStoreItem?.({
+        id,
+        label: label.value,
+        prop: prop.value
+      });
+    });
+
+    watch([label, prop], () => {
+      updateStoreItem?.(id, {
+        id,
+        label: label.value,
+        prop: prop.value
+      });
+    });
   },
 });
 </script>
