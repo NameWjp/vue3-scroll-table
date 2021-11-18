@@ -1,4 +1,4 @@
-# vue3-photo-preview-demo
+# vue3-scroll-table-demo
 
 ## Project setup
 ```
