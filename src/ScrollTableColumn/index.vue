@@ -1,10 +1,6 @@
-<template>
-  <slot />
-</template>
-
 <script lang='ts'>
-import { defineComponent, inject, onBeforeMount, toRefs, watch } from 'vue';
-import { addStoreItemKey, updateStoreItemKey } from '../symbols';
+import { defineComponent, inject, onBeforeMount, toRefs, watch, h } from 'vue';
+import { updateStoreItemKey } from '../symbols';
 import uniqueId from 'lodash-es/uniqueId';
 
 export default defineComponent({
@@ -25,30 +21,31 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { slots }) {
     const { label, prop } = toRefs(props);
     const id = uniqueId();
-    const addStoreItem = inject(addStoreItemKey);
     const updateStoreItem = inject(updateStoreItemKey);
+    const getStoreItem = () => ({
+      id,
+      label: label.value,
+      prop: prop.value,
+      renderHeader: slots.header,
+      renderCell: slots.default
+    });
 
     onBeforeMount(() => {
-      addStoreItem?.({
-        id,
-        label: label.value,
-        prop: prop.value
-      });
+      updateStoreItem?.(getStoreItem());
     });
 
     watch([label, prop], () => {
-      updateStoreItem?.(id, {
-        id,
-        label: label.value,
-        prop: prop.value
-      });
+      updateStoreItem?.(getStoreItem());
     });
+  },
+  render() {
+    return h('div');
   },
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 </style>

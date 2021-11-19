@@ -4,14 +4,23 @@
       <slot />
     </div>
     <thead class="scroll-table-header">
-      <tr>
+      <tr class="tr">
         <th
-          v-for="column in store"
+          v-for="(column, index) in store"
           :key="column.id"
           colspan="1"
           rowspan="1"
+          class="td"
         >
-          {{ column.label }}
+          <div class="cell">
+            <v-nodes
+              v-if="column.renderHeader"
+              :vnodes="column.renderHeader({ column, $index: index })"
+            />
+            <template v-else>
+              {{ column.label }}
+            </template>
+          </div>
         </th>
       </tr>
     </thead>
@@ -19,14 +28,24 @@
       <tr
         v-for="(item, index) in data"
         :key="index"
+        class="tr"
       >
         <th
           v-for="column in store"
           :key="column.id"
           colspan="1"
           rowspan="1"
+          class="td"
         >
-          {{ item[column.prop] }}
+          <div class="cell">
+            <v-nodes
+              v-if="column.renderCell"
+              :vnodes="column.renderCell({ row: item, column, $index: index })"
+            />
+            <template v-else>
+              {{ item[column.prop] }}
+            </template>
+          </div>
         </th>
       </tr>
     </tbody>
@@ -35,12 +54,16 @@
 
 <script lang='ts'>
 import { defineComponent, PropType, provide } from 'vue';
-import { addStoreItemKey, removeStoreItemKey, updateStoreItemKey } from '../symbols';
+import { removeStoreItemKey, updateStoreItemKey } from '../symbols';
 import { DefaultRow } from '../types';
 import useStore from './useStore';
+import VNodes from '../VNodes/index';
 
 export default defineComponent({
   name: 'ScrollTable',
+  components: {
+    VNodes
+  },
   props: {
     /**
      * 表格数据
@@ -51,9 +74,8 @@ export default defineComponent({
     }
   },
   setup() {
-    const { store, addStoreItem, removeStoreItem, updateStoreItem } = useStore();
+    const { store, removeStoreItem, updateStoreItem } = useStore();
 
-    provide(addStoreItemKey, addStoreItem);
     provide(removeStoreItemKey, removeStoreItem);
     provide(updateStoreItemKey, updateStoreItem);
 
@@ -64,12 +86,37 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .scroll-table {
+  width: 100%;
+  font-size: 14px;
+  background-color: #fff;
+  border-collapse: collapse;
+  border-left: 1px solid #ebeef5;
+  border-top: 1px solid #ebeef5;
   .hidden-columns {
     visibility: hidden;
     position: absolute;
     z-index: -1;
+  }
+  .scroll-table-header {
+    color: #909399;
+  }
+  .scroll-table-body {
+    color: #606266;
+    .tr:hover {
+      background-color: #f5f7fa;
+    }
+  }
+  .td {
+    text-align: center;
+    border-bottom: 1px solid #ebeef5;
+    border-right: 1px solid #ebeef5;
+    font-weight: 400;
+    padding: 12px 0;
+  }
+  .cell {
+    padding: 0 10px;
   }
 }
 </style>
