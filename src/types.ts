@@ -16,3 +16,9 @@ export type StoreItem = {
 export type RemoveStoreItem = (id: string) => void;
 
 export type UpdateStoreItem = (newItem: StoreItem) => void;
+
+export enum AnimationEnum {
+  Stop,
+  Run,
+  Await
+}

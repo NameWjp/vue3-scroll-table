@@ -6,6 +6,8 @@
     <table
       ref="table"
       class="scroll-table-body"
+      @mouseenter="handleHover"
+      @mouseleave="handleLeave"
     >
       <colgroup>
         <col
@@ -93,16 +95,29 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { store, data, interval, transition } = toRefs(props);
+    const { store, data, interval, transition, hoverStop } = toRefs(props);
     const table = ref<HTMLElement | null>(null);
     const tableWrap = ref<HTMLElement | null>(null);
 
-    const { tableData } = useScroll({ store, data, tableWrap, table, interval, transition });
+    const { tableData, pauseScroll, recoverScroll } = useScroll({ store, data, tableWrap, table, interval, transition });
+
+    const handleHover = () => {
+      if (hoverStop.value) {
+        pauseScroll();
+      }
+    };
+    const handleLeave = () => {
+      if (hoverStop.value) {
+        recoverScroll();
+      }
+    };
 
     return {
       table,
       tableData,
       tableWrap,
+      handleHover,
+      handleLeave,
     };
   }
 });
