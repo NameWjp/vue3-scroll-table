@@ -8,6 +8,7 @@ export type StoreItem = {
   id: string,
   prop: string,
   label?: string,
+  width?: string | number,
   renderHeader?: Slot,
   renderCell?: Slot,
 }

@@ -20,15 +20,23 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    /**
+     * 列宽
+     */
+    width: {
+      type: [String, Number],
+      default: null,
+    }
   },
   setup(props, { slots }) {
-    const { label, prop } = toRefs(props);
+    const { label, prop, width } = toRefs(props);
     const id = uniqueId();
     const updateStoreItem = inject(updateStoreItemKey);
     const getStoreItem = () => ({
       id,
       label: label.value,
       prop: prop.value,
+      width: width.value,
       renderHeader: slots.header,
       renderCell: slots.default
     });
@@ -37,7 +45,7 @@ export default defineComponent({
       updateStoreItem?.(getStoreItem());
     });
 
-    watch([label, prop], () => {
+    watch([label, prop, width], () => {
       updateStoreItem?.(getStoreItem());
     });
   },

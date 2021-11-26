@@ -1,55 +1,22 @@
 <template>
-  <table class="scroll-table">
+  <div
+    class="scroll-table"
+    :style="{ height: height === null ? 'auto' : `${height}px` }"
+  >
     <div class="hidden-columns">
       <slot />
     </div>
-    <thead class="scroll-table-header">
-      <tr class="tr">
-        <th
-          v-for="(column, index) in store"
-          :key="column.id"
-          colspan="1"
-          rowspan="1"
-          class="td"
-        >
-          <div class="cell">
-            <v-nodes
-              v-if="column.renderHeader"
-              :vnodes="column.renderHeader({ column, $index: index })"
-            />
-            <template v-else>
-              {{ column.label }}
-            </template>
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody class="scroll-table-body">
-      <tr
-        v-for="(item, index) in data"
-        :key="index"
-        class="tr"
-      >
-        <th
-          v-for="column in store"
-          :key="column.id"
-          colspan="1"
-          rowspan="1"
-          class="td"
-        >
-          <div class="cell">
-            <v-nodes
-              v-if="column.renderCell"
-              :vnodes="column.renderCell({ row: item, column, $index: index })"
-            />
-            <template v-else>
-              {{ item[column.prop] }}
-            </template>
-          </div>
-        </th>
-      </tr>
-    </tbody>
-  </table>
+    <table-header
+      :store="store"
+    />
+    <table-body
+      :store="store"
+      :data="data"
+      :interval="interval"
+      :transition="transition"
+      :hover-stop="hoverStop"
+    />
+  </div>
 </template>
 
 <script lang='ts'>
@@ -57,12 +24,14 @@ import { defineComponent, PropType, provide } from 'vue';
 import { removeStoreItemKey, updateStoreItemKey } from '../symbols';
 import { DefaultRow } from '../types';
 import useStore from './useStore';
-import VNodes from '../VNodes/index';
+import TableHeader from './table-header/index.vue';
+import TableBody from './table-body/index.vue';
 
 export default defineComponent({
   name: 'ScrollTable',
   components: {
-    VNodes
+    TableHeader,
+    TableBody
   },
   props: {
     /**
@@ -71,6 +40,34 @@ export default defineComponent({
     data: {
       type: Array as PropType<DefaultRow[]>,
       default: () => []
+    },
+    /**
+     * table 高，默认不滚动
+     */
+    height: {
+      type: Number,
+      default: null
+    },
+    /**
+     * 滚动间隔
+     */
+    interval: {
+      type: Number,
+      default: 2,
+    },
+    /**
+     * 滚动过渡时间
+     */
+    transition: {
+      type: Number,
+      default: 1,
+    },
+    /**
+     * hover 状态下是否停止滚动
+     */
+    hoverStop: {
+      type: Boolean,
+      default: false,
     }
   },
   setup() {
@@ -80,7 +77,7 @@ export default defineComponent({
     provide(updateStoreItemKey, updateStoreItem);
 
     return {
-      store
+      store,
     };
   },
 });
@@ -88,35 +85,14 @@ export default defineComponent({
 
 <style lang="scss">
 .scroll-table {
-  width: 100%;
+  overflow: hidden;
   font-size: 14px;
-  background-color: #fff;
-  border-collapse: collapse;
-  border-left: 1px solid #ebeef5;
-  border-top: 1px solid #ebeef5;
+  display: flex;
+  flex-direction: column;
   .hidden-columns {
     visibility: hidden;
     position: absolute;
     z-index: -1;
-  }
-  .scroll-table-header {
-    color: #909399;
-  }
-  .scroll-table-body {
-    color: #606266;
-    .tr:hover {
-      background-color: #f5f7fa;
-    }
-  }
-  .td {
-    text-align: center;
-    border-bottom: 1px solid #ebeef5;
-    border-right: 1px solid #ebeef5;
-    font-weight: 400;
-    padding: 12px 0;
-  }
-  .cell {
-    padding: 0 10px;
   }
 }
 </style>

@@ -1,8 +1,9 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { ScrollTable, ScrollTableColumn } from 'vue3-scroll-table';
 import OriginScrollTable from 'vue3-scroll-table/src/ScrollTable/index.vue';
-import OriginScrollTableColumn from 'vue3-scroll-table/src/ScrollTableColumn/index.vue'
+import OriginScrollTableColumn from 'vue3-scroll-table/src/ScrollTableColumn/index.vue';
 import 'vue3-scroll-table/dist/index.css';
+import imgSrc from '../images/1.jpg';
 
 <Meta title="vue3-scroll-table" />
 
@@ -52,6 +53,7 @@ import 'vue3-scroll-table/dist/index.css';
       () => ({
         data() {
           return {
+            imgSrc,
             tableData: [{
               date: '2016-05-02',
               name: '王小虎',
@@ -74,14 +76,53 @@ import 'vue3-scroll-table/dist/index.css';
         components: { ScrollTable, ScrollTableColumn },
         template: `
           <scroll-table :data="tableData">
-            <scroll-table-column prop="date" label="日期">
-              <template #default="{ row, column, $index }">
-                {{ row.date }}_身体
-              </template>
+            <scroll-table-column width="200" prop="date" label="日期">
               <template #header="{ column, $index }">
                 {{ column.label }}_头部
               </template>
+              <template #default="{ row, column, $index }">
+                <img :src="imgSrc" style="width:120px;">
+              </template>
             </scroll-table-column>
+            <scroll-table-column prop="name" label="姓名" />
+            <scroll-table-column prop="address" label="地址" />
+          </scroll-table>
+        `
+      })
+    }
+  </Story>
+</Canvas>
+
+## 滚动展示
+<Canvas>
+  <Story name="滚动展示">
+    {
+      () => ({
+        data() {
+          return {
+            tableData: [{
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 01 弄'
+            }, {
+              date: '2016-05-02',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 02 弄'
+            }, {
+              date: '2016-05-03',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 03 弄'
+            }, {
+              date: '2016-05-04',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 04 弄'
+            }]
+          }
+        },
+        components: { ScrollTable, ScrollTableColumn },
+        template: `
+          <scroll-table :data="tableData" hoverStop :height="200">
+            <scroll-table-column prop="date" label="日期" />
             <scroll-table-column prop="name" label="姓名" />
             <scroll-table-column prop="address" label="地址" />
           </scroll-table>

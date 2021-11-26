@@ -1,7 +1,5 @@
 # vue3-scroll-table
-vue3 的滚动 table 组件
-
-### 特点
+模拟 Element 的 table 组件，添加了滚动功能
 
 ## 开始使用
 ### 安装
@@ -19,6 +17,11 @@ app.use(vue3ScrollTable);
 ### 使用
 ```html
 <template>
+  <scroll-table :data="tableData" :height="200">
+    <scroll-table-column prop="date" label="日期" />
+    <scroll-table-column prop="name" label="姓名" />
+    <scroll-table-column prop="address" label="地址" />
+  </scroll-table>
 </template>
 ```
 
