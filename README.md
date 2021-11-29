@@ -13,11 +13,10 @@ import 'vue3-scroll-table/dist/index.css';
 
 app.use(vue3ScrollTable);
 ```
-
 ### 使用
 ```html
 <template>
-  <scroll-table :data="tableData" :height="200">
+  <scroll-table :data="tableData" hoverStop :height="200">
     <scroll-table-column prop="date" label="日期" />
     <scroll-table-column prop="name" label="姓名" />
     <scroll-table-column prop="address" label="地址" />
@@ -26,6 +25,27 @@ app.use(vue3ScrollTable);
 ```
 
 ## API
+### ScrollTable
+#### 属性
+| 名称 | 类型 | 描述 | 默认值 | 必填 |
+| :-----| :---- | :---- | :---- | :---- |
+| data | DefaultRow[] | 表格数据 | [] | 否 |
+| height | number | table 高，默认不滚动 | - | 否 |
+| interval | number | 滚动间隔 | 2 | 否 |
+| transition | number | 滚动过渡时间 | 1 | 否 |
+| hoverStop | boolean | hover 状态下是否停止滚动 | false | 否 |
+#### 事件
+| 名称 | 描述 | 参数 |
+| :-----| :---- | :---- |
+| click | 点击行回调 | row, column, event |
+
+### ScrollTableColumn
+#### 属性
+| 名称 | 类型 | 描述 | 默认值 | 必填 |
+| :-----| :---- | :---- | :---- | :---- |
+| label | string | 列名称 | - | 否 |
+| prop | string | 对应列内容的字段名 | - | 是 |
+| width | string/number | 列宽 | - | 否 |
 
 ## 本地开发调试
 

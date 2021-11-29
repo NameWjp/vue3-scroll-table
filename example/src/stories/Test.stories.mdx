@@ -119,9 +119,14 @@ import imgSrc from '../images/1.jpg';
             }]
           }
         },
+        methods: {
+          handleClick(row, column, event) {
+            console.log(row, column, event);
+          }
+        },
         components: { ScrollTable, ScrollTableColumn },
         template: `
-          <scroll-table :data="tableData" hoverStop :height="200">
+          <scroll-table :data="tableData" hoverStop :height="200" @click="handleClick">
             <scroll-table-column prop="date" label="日期" />
             <scroll-table-column prop="name" label="姓名" />
             <scroll-table-column prop="address" label="地址" />

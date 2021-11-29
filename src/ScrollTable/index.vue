@@ -15,6 +15,7 @@
       :interval="interval"
       :transition="transition"
       :hover-stop="hoverStop"
+      @click="handleClick"
     />
   </div>
 </template>
@@ -22,7 +23,7 @@
 <script lang='ts'>
 import { defineComponent, PropType, provide } from 'vue';
 import { removeStoreItemKey, updateStoreItemKey } from '../symbols';
-import { DefaultRow } from '../types';
+import { DefaultRow, StoreItem } from '../types';
 import useStore from './useStore';
 import TableHeader from './table-header/index.vue';
 import TableBody from './table-body/index.vue';
@@ -70,14 +71,20 @@ export default defineComponent({
       default: false,
     }
   },
-  setup() {
+  emits: ['click'],
+  setup(_props, { emit }) {
     const { store, removeStoreItem, updateStoreItem } = useStore();
 
     provide(removeStoreItemKey, removeStoreItem);
     provide(updateStoreItemKey, updateStoreItem);
 
+    const handleClick = (row: DefaultRow, column: StoreItem, event: MouseEvent) => {
+      emit('click', row, column, event);
+    };
+
     return {
       store,
+      handleClick,
     };
   },
 });

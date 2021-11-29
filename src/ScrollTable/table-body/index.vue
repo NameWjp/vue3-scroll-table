@@ -29,6 +29,7 @@
             colspan="1"
             rowspan="1"
             class="td"
+            @click="handleClick(item, column, $event)"
           >
             <div class="cell">
               <v-nodes
@@ -94,7 +95,8 @@ export default defineComponent({
       default: false,
     }
   },
-  setup(props) {
+  emits: ['click'],
+  setup(props, {emit}) {
     const { store, data, interval, transition, hoverStop } = toRefs(props);
     const table = ref<HTMLElement | null>(null);
     const tableWrap = ref<HTMLElement | null>(null);
@@ -111,6 +113,9 @@ export default defineComponent({
         recoverScroll();
       }
     };
+    const handleClick = (row: DefaultRow, column: StoreItem, event: MouseEvent) => {
+      emit('click', row, column, event);
+    };
 
     return {
       table,
@@ -118,6 +123,7 @@ export default defineComponent({
       tableWrap,
       handleHover,
       handleLeave,
+      handleClick,
     };
   }
 });
