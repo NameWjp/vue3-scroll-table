@@ -14,23 +14,32 @@ export default function useScroll({
   transition: Ref<number>,
 }): {
   tableData: Ref<DefaultRow[]>,
+  ableScroll: Ref<boolean>,
   startScroll: () => void,
   stopScroll: () => void,
   pauseScroll: () => void,
   recoverScroll: () => void,
 } {
+  // 数据源
   const tableData = ref<DefaultRow[]>(data.value.slice());
+  // 定时器
   const timer = ref<number>();
+  // 是否需要滚动
   const needScroll = ref<boolean>(true);
+  // 是否能够滚动
+  const ableScroll = ref<boolean>(false);
+  // 动画类型
   let animationEnum = AnimationEnum.Stop;
 
-  const isAbleScroll = () => {
+  const computedAbleScroll = () => {
     if (tableWrap.value && table.value) {
       const wrapHeight = tableWrap.value.offsetHeight;
       const contentHeight = table.value.offsetHeight;
-      return contentHeight > wrapHeight;
+      ableScroll.value = contentHeight > wrapHeight;
+    } else {
+      ableScroll.value = false;
     }
-    return false;
+    return ableScroll.value;
   };
 
   const addTimer = () => {
@@ -76,7 +85,7 @@ export default function useScroll({
   };
 
   const startScroll = () => {
-    if (!isAbleScroll()) return;
+    if (!computedAbleScroll()) return;
     needScroll.value = true;
     toScroll();
   };
@@ -121,6 +130,7 @@ export default function useScroll({
 
   return {
     tableData,
+    ableScroll,
     startScroll,
     stopScroll,
     pauseScroll,

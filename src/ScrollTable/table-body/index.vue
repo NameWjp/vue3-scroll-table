@@ -2,6 +2,7 @@
   <div
     ref="tableWrap"
     class="scroll-table-body-wrapper"
+    :style="{ borderBottom: ableScroll ? '1px solid #ebeef5' : 'none' }"
   >
     <table
       ref="table"
@@ -101,7 +102,7 @@ export default defineComponent({
     const table = ref<HTMLElement | null>(null);
     const tableWrap = ref<HTMLElement | null>(null);
 
-    const { tableData, pauseScroll, recoverScroll } = useScroll({ store, data, tableWrap, table, interval, transition });
+    const { tableData, ableScroll, pauseScroll, recoverScroll } = useScroll({ store, data, tableWrap, table, interval, transition });
 
     const handleHover = () => {
       if (hoverStop.value) {
@@ -119,8 +120,9 @@ export default defineComponent({
 
     return {
       table,
-      tableData,
       tableWrap,
+      tableData,
+      ableScroll,
       handleHover,
       handleLeave,
       handleClick,
