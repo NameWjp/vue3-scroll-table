@@ -13,6 +13,8 @@ const install = (app: App): void  => {
   });
 };
 
+export * from './types';
+
 export { ScrollTable, ScrollTableColumn };
 
 export default { install };
