@@ -1,6 +1,6 @@
 {
   "name": "vue3-scroll-table",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "一个 vue3 的滚动 table 组件",
   "main": "dist/vue3-scroll-table.umd.js",
   "module": "dist/vue3-scroll-table.esm.js",
