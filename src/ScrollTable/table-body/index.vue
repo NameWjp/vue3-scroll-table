@@ -35,7 +35,7 @@
             <div class="cell">
               <v-nodes
                 v-if="column.renderCell"
-                :vnodes="column.renderCell({ row: item, column, $index: index })"
+                :vnodes="column.renderCell({ row: item, column, $index: getItemIndex(item) })"
               />
               <template v-else>
                 {{ item[column.prop] }}
@@ -117,6 +117,9 @@ export default defineComponent({
     const handleClick = (row: DefaultRow, column: StoreItem, event: MouseEvent) => {
       emit('click', row, column, event);
     };
+    const getItemIndex = (item: DefaultRow): number => {
+      return data.value.findIndex(i => i === item);
+    };
 
     return {
       table,
@@ -126,6 +129,7 @@ export default defineComponent({
       handleHover,
       handleLeave,
       handleClick,
+      getItemIndex
     };
   }
 });
