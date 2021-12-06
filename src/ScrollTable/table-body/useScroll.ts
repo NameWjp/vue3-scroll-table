@@ -50,10 +50,9 @@ export default function useScroll({
   };
 
   const toScroll = () => {
-    const head = tableData.value[0];
-    if (head && table.value && animationEnum !== AnimationEnum.Run) {
+    if (tableData.value.length && table.value && animationEnum !== AnimationEnum.Run) {
       animationEnum = AnimationEnum.Run;
-      tableData.value.push(head);
+      tableData.value.push(tableData.value[0]);
       const offsetHeight = table.value.getElementsByTagName('tr')[0].offsetHeight;
 
       keyframeAnimation.registerKeyframe('move', {
@@ -116,6 +115,10 @@ export default function useScroll({
   };
 
   const refresh = () => {
+    tableData.value = data.value.slice();
+    if (tableData.value.length && table.value && animationEnum === AnimationEnum.Run) {
+      tableData.value.push(tableData.value[0]);
+    }
     stopScroll();
     startScroll();
   };
