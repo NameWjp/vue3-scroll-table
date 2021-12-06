@@ -65,7 +65,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "create-keyframe-animation": "^0.1.0",
+    "easy-keyframe-animation": "^0.0.1",
     "lodash-es": "^4.17.21",
     "vue": "3.2.x"
   },

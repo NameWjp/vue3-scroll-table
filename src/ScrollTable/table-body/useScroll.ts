@@ -1,7 +1,7 @@
 import { Ref, ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { StoreItem, DefaultRow, AnimationEnum } from '../../types';
 import useWindowResize from './useWindowResize';
-import animations from 'create-keyframe-animation';
+import keyframeAnimation from 'easy-keyframe-animation';
 
 export default function useScroll({
   store, data, tableWrap, table, interval, transition
@@ -55,24 +55,23 @@ export default function useScroll({
       animationEnum = AnimationEnum.Run;
       tableData.value.push(head);
       const offsetHeight = table.value.getElementsByTagName('tr')[0].offsetHeight;
-      animations.registerAnimation({
-        name: 'move',
-        animation: {
-          0: {
-            transform: `translate3d(0, 0, 0)`
-          },
-          100: {
-            transform: `translate3d(0, ${-offsetHeight}px, 0)`
-          }
+
+      keyframeAnimation.registerKeyframe('move', {
+        0: {
+          transform: `translate3d(0, 0, 0)`
+        },
+        100: {
+          transform: `translate3d(0, ${-offsetHeight}px, 0)`
         }
       });
-      animations.runAnimation(table.value, {
+
+      keyframeAnimation.addAnimation(table.value, {
         name: 'move',
-        duration: transition.value * 1000,
+        duration: `${transition.value}s`,
       }, () => {
         tableData.value.shift();
         if (table.value) {
-          table.value.style.animation = '';
+          keyframeAnimation.removeAnimation(table.value);
           if (needScroll.value) {
             animationEnum = AnimationEnum.Await;
             addTimer();
@@ -98,7 +97,7 @@ export default function useScroll({
   const pauseScroll = () => {
     if (animationEnum === AnimationEnum.Run) {
       if (table.value) {
-        table.value.style.animationPlayState = 'paused';
+        keyframeAnimation.pauseAnimation(table.value);
       }
     }
     if (animationEnum === AnimationEnum.Await) {
@@ -108,7 +107,7 @@ export default function useScroll({
   const recoverScroll = () => {
     if (animationEnum === AnimationEnum.Run) {
       if (table.value) {
-        table.value.style.animationPlayState = 'running';
+        keyframeAnimation.recoverAnimation(table.value);
       }
     }
     if (animationEnum === AnimationEnum.Await) {
@@ -117,7 +116,6 @@ export default function useScroll({
   };
 
   const refresh = () => {
-    tableData.value = data.value.slice();
     stopScroll();
     startScroll();
   };
