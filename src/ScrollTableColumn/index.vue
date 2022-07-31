@@ -1,6 +1,6 @@
 <script lang='ts'>
-import { defineComponent, inject, onBeforeMount, toRefs, watch, h } from 'vue';
-import { updateStoreItemKey } from '../symbols';
+import { defineComponent, inject, toRefs, watch, h, onMounted, onUnmounted } from 'vue';
+import { updateStoreItemKey, removeStoreItemKey } from '../symbols';
 import uniqueId from 'lodash-es/uniqueId';
 
 export default defineComponent({
@@ -32,6 +32,8 @@ export default defineComponent({
     const { label, prop, width } = toRefs(props);
     const id = uniqueId();
     const updateStoreItem = inject(updateStoreItemKey);
+    const removeStoreItem = inject(removeStoreItemKey);
+
     const getStoreItem = () => ({
       id,
       label: label.value,
@@ -41,12 +43,16 @@ export default defineComponent({
       renderCell: slots.default
     });
 
-    onBeforeMount(() => {
+    watch([label, prop, width], () => {
       updateStoreItem?.(getStoreItem());
     });
 
-    watch([label, prop, width], () => {
+    onMounted(() => {
       updateStoreItem?.(getStoreItem());
+    });
+
+    onUnmounted(() => {
+      removeStoreItem?.(id);
     });
   },
   render() {
