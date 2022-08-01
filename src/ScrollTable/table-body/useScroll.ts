@@ -1,4 +1,4 @@
-import { Ref, ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { Ref, ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
 import { StoreItem, DefaultRow, AnimationEnum } from '../../types';
 import useWindowResize from './useWindowResize';
 import keyframeAnimation from 'easy-keyframe-animation';
@@ -123,7 +123,9 @@ export default function useScroll({
     startScroll();
   };
 
-  onMounted(startScroll);
+  onMounted(() => {
+    nextTick(startScroll);
+  });
   onBeforeUnmount(stopScroll);
 
   watch([store.value, data.value], refresh);
