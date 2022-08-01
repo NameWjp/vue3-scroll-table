@@ -83,9 +83,11 @@ export default function useScroll({
   };
 
   const startScroll = () => {
-    if (!computedAbleScroll()) return;
-    needScroll.value = true;
-    toScroll();
+    nextTick(() => {
+      if (!computedAbleScroll()) return;
+      needScroll.value = true;
+      toScroll();
+    });
   };
   const stopScroll = () => {
     needScroll.value = false;
@@ -123,9 +125,7 @@ export default function useScroll({
     startScroll();
   };
 
-  onMounted(() => {
-    nextTick(startScroll);
-  });
+  onMounted(startScroll);
   onBeforeUnmount(stopScroll);
 
   watch([store.value, data.value], refresh);
