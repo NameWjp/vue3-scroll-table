@@ -56,9 +56,6 @@ app.use(vue3ScrollTable);
 # 安装依赖
 npm ci
 
-# 构建一次结果
-npm run build
-
 # 实时编译代码
 npm run dev
 ```
