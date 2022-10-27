@@ -15,6 +15,6 @@ git init
 git add -A
 git commit -m 'deploy'
 
-git push -f git@github.com:NameWjp/vue3-scroll-table.git master:gh-pages
+git push -f git@github.com:NameWjp/vue3-scroll-table.git main:gh-pages
 
 cd -
