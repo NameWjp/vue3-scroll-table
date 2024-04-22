@@ -126,7 +126,7 @@ export default function useScroll({
   const refresh = () => {
     tableData.value = data.value.slice();
     if (tableData.value.length && table.value && animationEnum === AnimationEnum.Run) {
-      tableData.value.push(tableData.value[0]);
+      tableData.value.push(...tableData.value.slice(0, scrollCount.value));
     }
     stopScroll();
     startScroll();
