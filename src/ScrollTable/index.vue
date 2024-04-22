@@ -7,6 +7,7 @@
       <slot />
     </div>
     <table-header
+      v-if="showHeader"
       :store="store"
     />
     <table-body
@@ -15,6 +16,7 @@
       :interval="interval"
       :transition="transition"
       :hover-stop="hoverStop"
+      :show-header="showHeader"
       @click="handleClick"
     />
   </div>
@@ -69,6 +71,13 @@ export default defineComponent({
     hoverStop: {
       type: Boolean,
       default: false,
+    },
+    /**
+     * 是否显示头部
+     */
+    showHeader: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['click'],

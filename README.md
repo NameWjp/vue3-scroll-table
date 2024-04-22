@@ -36,6 +36,7 @@ app.use(vue3ScrollTable);
 | interval | number | 滚动间隔 | 2 | 否 |
 | transition | number | 滚动过渡时间 | 1 | 否 |
 | hoverStop | boolean | hover 状态下是否停止滚动 | false | 否 |
+| showHeader | boolean | 是否显示头部 | true | 否 |
 #### 事件
 | 名称 | 描述 | 参数 |
 | :-----| :---- | :---- |

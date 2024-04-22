@@ -2,7 +2,10 @@
   <div
     ref="tableWrap"
     class="scroll-table-body-wrapper"
-    :style="{ borderBottom: ableScroll ? '1px solid #ebeef5' : 'none' }"
+    :style="{
+      borderBottom: ableScroll ? '1px solid #ebeef5' : 'none',
+      borderTop: !showHeader ? '1px solid #ebeef5' : 'none',
+    }"
   >
     <table
       ref="table"
@@ -94,6 +97,13 @@ export default defineComponent({
     hoverStop: {
       type: Boolean,
       default: false,
+    },
+    /**
+     * 是否显示头部
+     */
+     showHeader: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['click'],
