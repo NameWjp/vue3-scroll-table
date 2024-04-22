@@ -104,15 +104,22 @@ export default defineComponent({
      showHeader: {
       type: Boolean,
       default: true
-    }
+    },
+    /**
+     * 滚动个数
+     */
+     scrollCount: {
+      type: Number,
+      default: 1
+    },
   },
   emits: ['click'],
   setup(props, {emit}) {
-    const { store, data, interval, transition, hoverStop } = toRefs(props);
+    const { store, data, interval, transition, hoverStop, scrollCount } = toRefs(props);
     const table = ref<HTMLElement | null>(null);
     const tableWrap = ref<HTMLElement | null>(null);
 
-    const { tableData, ableScroll, pauseScroll, recoverScroll } = useScroll({ store, data, tableWrap, table, interval, transition });
+    const { tableData, ableScroll, pauseScroll, recoverScroll } = useScroll({ store, data, tableWrap, table, interval, transition, scrollCount });
 
     const handleHover = () => {
       if (hoverStop.value) {

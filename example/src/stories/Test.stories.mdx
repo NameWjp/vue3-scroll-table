@@ -176,6 +176,50 @@ import imgSrc from '../images/1.jpg';
   </Story>
 </Canvas>
 
+## 滚动多个
+<Canvas>
+  <Story name="滚动多个">
+    {
+      () => ({
+        data() {
+          return {
+            tableData: [{
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江'
+            }, {
+              date: '2016-05-02',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路上海市普陀区金沙江路上海市普陀区金沙江路 02 弄上海市普陀区金沙江路上海市普陀区金沙江路上海市普陀区金沙江路 02 弄'
+            }, {
+              date: '2016-05-03',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路上海市普陀区金沙江路上海市普陀区金沙江路 03 弄'
+            }, {
+              date: '2016-05-04',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路上海市普陀区金沙江路上海市普陀区金沙江路 04 弄'
+            }]
+          }
+        },
+        methods: {
+          handleClick(row, column, event) {
+            console.log(row, column, event);
+          }
+        },
+        components: { ScrollTable, ScrollTableColumn },
+        template: `
+          <scroll-table :data="tableData" hoverStop :height="300" :scrollCount="2" @click="handleClick">
+            <scroll-table-column prop="date" label="日期" />
+            <scroll-table-column prop="name" label="姓名" />
+            <scroll-table-column prop="address" label="地址" />
+          </scroll-table>
+        `
+      })
+    }
+  </Story>
+</Canvas>
+
 ## Props
 
 ### ScrollTable

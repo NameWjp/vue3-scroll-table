@@ -4,7 +4,7 @@ import useWindowResize from './useWindowResize';
 import keyframeAnimation from 'easy-keyframe-animation';
 
 export default function useScroll({
-  store, data, tableWrap, table, interval, transition
+  store, data, tableWrap, table, interval, transition, scrollCount
 }: {
   store: Ref<StoreItem[]>,
   data: Ref<DefaultRow[]>,
@@ -12,6 +12,7 @@ export default function useScroll({
   table: Ref<HTMLElement | null>,
   interval: Ref<number>,
   transition: Ref<number>,
+  scrollCount: Ref<number>
 }): {
   tableData: Ref<DefaultRow[]>,
   ableScroll: Ref<boolean>,
@@ -50,10 +51,16 @@ export default function useScroll({
   };
 
   const toScroll = () => {
-    if (tableData.value.length && table.value && animationEnum !== AnimationEnum.Run) {
+    if (tableData.value.length && table.value  && animationEnum !== AnimationEnum.Run) {
       animationEnum = AnimationEnum.Run;
-      tableData.value.push(tableData.value[0]);
-      const offsetHeight = table.value.getElementsByTagName('tr')[0].offsetHeight;
+      tableData.value.push(...tableData.value.slice(0, scrollCount.value));
+      let offsetHeight = 0;
+      const trDoms = table.value.getElementsByTagName('tr');
+      Array.from({ length: scrollCount.value }).forEach((_, index) => {
+        if (trDoms[index]) {
+          offsetHeight += trDoms[index].offsetHeight;
+        }
+      });
 
       keyframeAnimation.registerKeyframe('move', {
         0: {
@@ -68,7 +75,7 @@ export default function useScroll({
         name: 'move',
         duration: `${transition.value}s`,
       }, () => {
-        tableData.value.shift();
+        tableData.value = tableData.value.slice(scrollCount.value);
         if (table.value) {
           keyframeAnimation.removeAnimation(table.value);
           if (needScroll.value) {

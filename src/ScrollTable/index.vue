@@ -17,6 +17,7 @@
       :transition="transition"
       :hover-stop="hoverStop"
       :show-header="showHeader"
+      :scroll-count="scrollCount"
       @click="handleClick"
     />
   </div>
@@ -78,7 +79,14 @@ export default defineComponent({
     showHeader: {
       type: Boolean,
       default: true
-    }
+    },
+    /**
+     * 滚动个数
+     */
+     scrollCount: {
+      type: Number,
+      default: 1
+    },
   },
   emits: ['click'],
   setup(_props, { emit }) {
